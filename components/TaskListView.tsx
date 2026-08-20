@@ -33,6 +33,7 @@ export default function TaskListView({
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<Task | null>(null);
   const [today, setToday] = useState<string | null>(null);
+  const [pendingId, setPendingId] = useState<string | null>(null);
 
   useEffect(() => setToday(todayISO()), []);
 
@@ -59,11 +60,15 @@ export default function TaskListView({
   const remaining = tasks.filter((t) => !t.done).length;
 
   async function toggleDone(task: Task) {
+    if (pendingId) return; // 서버에 저장하는 동안 두 번 눌리는 것을 막습니다.
+    setPendingId(task.id);
     try {
       await api(`/api/tasks/${task.id}`, { method: "PATCH", body: { done: !task.done } });
       router.refresh();
     } catch (err) {
       alert(err instanceof Error ? err.message : "바꾸지 못했습니다.");
+    } finally {
+      setPendingId(null);
     }
   }
 
@@ -149,7 +154,7 @@ export default function TaskListView({
                     type="checkbox"
                     className="mt-1 size-4 shrink-0 accent-indigo-600 disabled:cursor-not-allowed"
                     checked={task.done}
-                    disabled={!canEdit}
+                    disabled={!canEdit || pendingId !== null}
                     onChange={() => toggleDone(task)}
                     aria-label="다 했어요"
                   />

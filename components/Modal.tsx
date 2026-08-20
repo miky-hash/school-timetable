@@ -32,7 +32,12 @@ export default function Modal({
         className="absolute inset-0 cursor-default"
         onClick={onClose}
       />
-      <div className="card relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-b-none p-5 sm:max-w-md sm:rounded-2xl">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={title}
+        className="card relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-b-none p-5 sm:max-w-md sm:rounded-2xl"
+      >
         <div className="mb-4 flex items-center justify-between gap-4">
           <h2 className="text-base font-semibold">{title}</h2>
           <button type="button" className="btn btn-ghost btn-sm" onClick={onClose}>
