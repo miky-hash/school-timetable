@@ -11,10 +11,10 @@ import Modal from "./Modal";
 import TaskForm from "./TaskForm";
 
 const TONE: Record<DueTone, string> = {
-  overdue: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
-  today: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  soon: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300",
-  later: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  overdue: "bg-rose-400/25 text-rose-700 dark:bg-rose-400/25 dark:text-rose-100",
+  today: "bg-amber-400/30 text-amber-800 dark:bg-amber-400/25 dark:text-amber-100",
+  soon: "bg-indigo-400/25 text-indigo-700 dark:bg-indigo-400/25 dark:text-indigo-100",
+  later: "bg-slate-400/20 text-slate-600 dark:bg-slate-400/20 dark:text-slate-200",
 };
 
 export default function TaskListView({
@@ -96,7 +96,7 @@ export default function TaskListView({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex gap-1">
+        <div className="segmented">
           <FilterChip active={typeFilter === "all"} onClick={() => setTypeFilter("all")}>
             전체
           </FilterChip>
@@ -112,7 +112,7 @@ export default function TaskListView({
         </div>
 
         <select
-          className="input h-8 w-auto py-0 text-xs"
+          className="input w-auto !py-1.5 !text-xs"
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
           aria-label="과목으로 거르기"
@@ -138,7 +138,7 @@ export default function TaskListView({
       </div>
 
       {visible.length === 0 ? (
-        <div className="card p-10 text-center text-sm text-slate-400">
+        <div className="card p-10 text-center text-sm text-slate-500 dark:text-slate-400">
           {tasks.length === 0 ? "아직 등록된 할 일이 없어요." : "조건에 맞는 할 일이 없어요."}
         </div>
       ) : (
@@ -148,7 +148,7 @@ export default function TaskListView({
             const info = today && task.due_date ? dueInfo(task.due_date, today) : null;
 
             return (
-              <li key={task.id} className={`card p-3 ${task.done ? "opacity-55" : ""}`}>
+              <li key={task.id} className={`card rounded-2xl p-3 transition duration-200 ${task.done ? "opacity-50" : ""}`}>
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
@@ -161,19 +161,19 @@ export default function TaskListView({
 
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
                         {taskTypeEmoji(task.type)} {taskTypeLabel(task.type)}
                       </span>
                       {subject && (
                         <span
-                          className={`rounded px-1.5 py-0.5 text-[11px] font-medium ${colorOf(subject.color).chip}`}
+                          className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${colorOf(subject.color).chip}`}
                         >
                           {subject.name}
                         </span>
                       )}
                       {task.due_date && (
                         <span
-                          className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ${
+                          className={`rounded-md px-2 py-0.5 text-[11px] font-semibold ${
                             info && !task.done ? TONE[info.tone] : TONE.later
                           }`}
                         >
@@ -196,7 +196,7 @@ export default function TaskListView({
                     )}
 
                     {task.created_by && (
-                      <p className="mt-1.5 text-[11px] text-slate-400">— {task.created_by}</p>
+                      <p className="mt-1.5 text-[11px] text-slate-500 dark:text-slate-400">— {task.created_by}</p>
                     )}
                   </div>
 
@@ -226,7 +226,7 @@ export default function TaskListView({
       )}
 
       {!canEdit && (
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
           할 일을 추가하거나 체크하려면 위에서 <strong>🔒 편집하기</strong> 를 눌러 잠금을 풀어주세요.
         </p>
       )}
@@ -271,11 +271,7 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full px-2.5 py-1 text-xs font-medium transition ${
-        active
-          ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
-          : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-      }`}
+      className={`segmented-item !px-3 !py-1 !text-xs ${active ? "segmented-item-active" : ""}`}
     >
       {children}
     </button>

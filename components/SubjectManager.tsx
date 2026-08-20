@@ -49,18 +49,18 @@ export default function SubjectManager({
       </div>
 
       {subjects.length === 0 ? (
-        <div className="card p-10 text-center text-sm text-slate-400">
+        <div className="card p-10 text-center text-sm text-slate-500 dark:text-slate-400">
           아직 과목이 없어요. {canEdit ? "먼저 과목을 만들어주세요." : ""}
         </div>
       ) : (
         <ul className="grid gap-2 sm:grid-cols-2">
           {subjects.map((subject) => (
-            <li key={subject.id} className="card flex items-center gap-3 p-3">
+            <li key={subject.id} className="card flex items-center gap-3 rounded-2xl p-3.5">
               <span className={`size-3 shrink-0 rounded-full ${colorOf(subject.color).dot}`} />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">{subject.name}</p>
                 {subject.teacher && (
-                  <p className="truncate text-xs text-slate-400">{subject.teacher}</p>
+                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">{subject.teacher}</p>
                 )}
               </div>
               {canEdit && (
@@ -87,7 +87,7 @@ export default function SubjectManager({
       )}
 
       {!canEdit && (
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
           과목을 고치려면 위에서 <strong>🔒 편집하기</strong> 를 눌러 잠금을 풀어주세요.
         </p>
       )}

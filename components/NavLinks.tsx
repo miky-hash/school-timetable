@@ -13,18 +13,15 @@ export default function NavLinks() {
   const pathname = usePathname();
 
   return (
-    <nav className="flex items-center gap-1">
+    <nav className="segmented">
       {LINKS.map((link) => {
         const active = pathname === link.href;
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={
-              active
-                ? "rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white dark:bg-white dark:text-slate-900"
-                : "rounded-lg px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-            }
+            aria-current={active ? "page" : undefined}
+            className={`segmented-item ${active ? "segmented-item-active" : ""}`}
           >
             {link.label}
           </Link>

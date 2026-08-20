@@ -51,14 +51,14 @@ export default function TimetableBoard({
     <section>
       <div className="card overflow-hidden">
         <div className="grid grid-cols-[2.5rem_repeat(5,minmax(0,1fr))] sm:grid-cols-[3.5rem_repeat(5,minmax(0,1fr))]">
-          <div className="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-900/60" />
+          <div className="border-b border-white/25 dark:border-white/10" />
           {DAYS.map((day) => (
             <div
               key={day.value}
-              className={`border-b border-slate-200 py-2 text-center text-sm font-semibold dark:border-slate-800 ${
+              className={`border-b border-white/25 py-2.5 text-center text-sm font-semibold dark:border-white/10 ${
                 today === day.value
-                  ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300"
-                  : "bg-slate-50 text-slate-600 dark:bg-slate-900/60 dark:text-slate-300"
+                  ? "bg-white/35 text-indigo-700 dark:bg-white/10 dark:text-indigo-200"
+                  : "text-slate-600 dark:text-slate-300"
               }`}
             >
               {day.label}
@@ -78,7 +78,7 @@ export default function TimetableBoard({
         </div>
       </div>
 
-      <p className="mt-3 text-center text-xs text-slate-400 dark:text-slate-500">
+      <p className="mt-3 text-center text-xs text-slate-500 dark:text-slate-400">
         {canEdit
           ? "칸을 눌러 과목을 넣거나 바꿀 수 있어요."
           : "칸을 누르면 그 과목의 남은 할 일을 볼 수 있어요."}
@@ -125,7 +125,7 @@ function PeriodRow({
 }) {
   return (
     <>
-      <div className="flex flex-col items-center justify-center border-t border-slate-100 py-1 text-slate-400 dark:border-slate-800/70 dark:text-slate-500">
+      <div className="flex flex-col items-center justify-center border-t border-white/20 py-1 text-slate-500 dark:border-white/[0.07] dark:text-slate-400">
         <span className="text-sm font-semibold">{period}</span>
         <span className="hidden text-[10px] sm:block">{PERIOD_TIMES[period]}</span>
       </div>
@@ -140,18 +140,18 @@ function PeriodRow({
             key={day.value}
             type="button"
             onClick={() => onPick({ day: day.value, period })}
-            className={`min-h-14 border-t border-l border-slate-100 p-1 text-center transition hover:brightness-95 sm:min-h-16 dark:border-slate-800/70 ${
+            className={`min-h-14 border-t border-l border-white/20 p-1 text-center transition duration-200 hover:bg-white/40 sm:min-h-16 dark:border-white/[0.07] dark:hover:bg-white/10 ${
               subject
-                ? `${palette.cell} ring-inset`
+                ? palette.cell
                 : today === day.value
-                  ? "bg-indigo-50/40 dark:bg-indigo-950/20"
+                  ? "bg-white/20"
                   : "bg-transparent"
             }`}
           >
             {subject ? (
               <span className="block truncate text-xs font-semibold sm:text-sm">{subject.name}</span>
             ) : (
-              <span className="block text-xs text-slate-300 dark:text-slate-700">·</span>
+              <span className="block text-xs text-slate-400/60 dark:text-slate-500/60">·</span>
             )}
             {slot?.note && (
               <span className="mt-0.5 block truncate text-[10px] opacity-70">{slot.note}</span>
@@ -227,7 +227,7 @@ function SlotEditor({
               ))}
             </select>
             {subjects.length === 0 && (
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 먼저{" "}
                 <Link href="/subjects" className="underline">
                   과목
@@ -284,7 +284,7 @@ function SlotEditor({
       )}
 
       {slot?.subject_id && (
-        <div className="border-t border-slate-100 pt-4 dark:border-slate-800">
+        <div className="mt-1 border-t border-white/30 pt-4 dark:border-white/10">
           <h3 className="mb-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
             이 과목의 남은 할 일
           </h3>

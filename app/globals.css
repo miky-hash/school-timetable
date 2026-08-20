@@ -1,7 +1,41 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   Liquid Glass 디자인 토큰
+   유리는 "뒤가 비쳐야" 유리로 보이기 때문에, 배경에 색이 있는
+   그라데이션을 깔고 그 위에 반투명 레이어를 얹는 구조입니다.
+   ───────────────────────────────────────────────────────────── */
 :root {
   color-scheme: light dark;
+
+  --glass-bg: rgba(255, 255, 255, 0.64);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-highlight: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 8px 32px -8px rgba(15, 23, 42, 0.22);
+  --glass-blur: 24px;
+
+  --tint: rgba(255, 255, 255, 0.4);
+  --tint-hover: rgba(255, 255, 255, 0.62);
+
+  --accent: #5b5bd6;
+  --accent-soft: rgba(91, 91, 214, 0.14);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg: rgba(20, 24, 38, 0.52);
+    --glass-bg-strong: rgba(20, 24, 38, 0.78);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-highlight: rgba(255, 255, 255, 0.16);
+    --glass-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.7);
+
+    --tint: rgba(255, 255, 255, 0.07);
+    --tint-hover: rgba(255, 255, 255, 0.14);
+
+    --accent: #8b8bf0;
+    --accent-soft: rgba(139, 139, 240, 0.2);
+  }
 }
 
 html {
@@ -12,44 +46,212 @@ body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", "Apple SD Gothic Neo",
     "Malgun Gothic", "Noto Sans KR", Roboto, sans-serif;
-  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  min-height: 100dvh;
+  background-color: #eef1f7;
+  background-attachment: fixed;
+  background-image:
+    radial-gradient(at 10% 4%, rgba(255, 145, 170, 0.32) 0px, transparent 50%),
+    radial-gradient(at 90% 2%, rgba(105, 160, 255, 0.32) 0px, transparent 46%),
+    radial-gradient(at 80% 68%, rgba(175, 135, 255, 0.26) 0px, transparent 50%),
+    radial-gradient(at 14% 88%, rgba(95, 220, 205, 0.26) 0px, transparent 46%);
+  @apply text-slate-900 antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #06080f;
+    background-image:
+      radial-gradient(at 12% 8%, rgba(150, 45, 100, 0.45) 0px, transparent 52%),
+      radial-gradient(at 88% 6%, rgba(30, 70, 165, 0.5) 0px, transparent 48%),
+      radial-gradient(at 78% 72%, rgba(95, 45, 165, 0.42) 0px, transparent 52%),
+      radial-gradient(at 16% 82%, rgba(15, 105, 110, 0.38) 0px, transparent 48%);
+    @apply text-slate-50;
+  }
+}
+
+/* 유리판 한 장.
+   가장자리 안쪽의 밝은 선(inset)이 Apple 유리 특유의 광택입니다.
+   @layer components 가 아니라 @utility 로 정의해야 @apply 로 재사용됩니다. */
+@utility glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 0 var(--glass-highlight),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.08),
+    var(--glass-shadow);
+}
+
+/* 헤더·모달처럼 내용을 확실히 덮어야 하는 곳 */
+@utility glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    inset 0 1px 0 0 var(--glass-highlight),
+    var(--glass-shadow);
 }
 
 @layer components {
   .card {
-    @apply rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900;
+    @apply glass rounded-3xl;
   }
 
   .btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 py-2
-      text-sm font-medium whitespace-nowrap transition
-      disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-full px-4 py-2
+      text-sm font-medium whitespace-nowrap
+      transition duration-200 ease-out
+      disabled:cursor-not-allowed disabled:opacity-45;
   }
+  .btn:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
   .btn-primary {
-    @apply bg-indigo-600 text-white hover:bg-indigo-500 active:bg-indigo-700;
+    background: var(--accent);
+    color: #fff;
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.35),
+      0 4px 16px -4px rgba(91, 91, 214, 0.55);
   }
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.1);
+  }
+
+  /* 배경을 비추는 반투명 버튼 */
   .btn-soft {
-    @apply bg-slate-100 text-slate-700 hover:bg-slate-200
-      dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700;
+    background: var(--tint);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 0 var(--glass-highlight);
+    @apply text-slate-700 dark:text-slate-100;
   }
+  .btn-soft:hover:not(:disabled) {
+    background: var(--tint-hover);
+  }
+
   .btn-ghost {
-    @apply text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800;
+    @apply text-slate-600 dark:text-slate-300;
   }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--tint);
+  }
+
   .btn-danger {
-    @apply text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/60;
+    @apply text-rose-600 dark:text-rose-400;
   }
+  .btn-danger:hover:not(:disabled) {
+    background: rgba(244, 63, 94, 0.12);
+  }
+
   .btn-sm {
-    @apply gap-1 rounded-md px-2 py-1 text-xs;
+    @apply gap-1 px-3 py-1.5 text-xs;
   }
 
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+    background: var(--tint);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 2px 0 rgba(15, 23, 42, 0.06);
+    @apply w-full rounded-2xl px-4 py-2.5 text-sm
       text-slate-900 placeholder:text-slate-400
-      focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 focus:outline-none
-      dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500;
+      transition outline-none
+      dark:text-slate-50 dark:placeholder:text-slate-500;
+  }
+  .input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  /* 셀렉트의 기본 화살표가 유리 위에서 튀지 않게 */
+  select.input {
+    @apply appearance-none pr-9;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2394a3b8'%3E%3Cpath d='M4.5 6.5 8 10l3.5-3.5'  stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
   }
 
   .label {
-    @apply mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400;
+    @apply mb-1.5 block text-xs font-medium text-slate-500 dark:text-slate-400;
+  }
+
+  /* 캡슐형 세그먼트 (탭 / 필터) */
+  .segmented {
+    background: var(--tint);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 0 var(--glass-highlight);
+    @apply flex items-center gap-0.5 rounded-full p-1;
+  }
+  .segmented-item {
+    @apply rounded-full px-3 py-1.5 text-sm font-medium transition duration-200;
+    @apply text-slate-600 dark:text-slate-300;
+  }
+  .segmented-item:hover {
+    background: var(--tint-hover);
+  }
+  .segmented-item-active {
+    background: var(--glass-bg-strong);
+    box-shadow:
+      inset 0 1px 0 0 var(--glass-highlight),
+      0 2px 8px -2px rgba(15, 23, 42, 0.2);
+    @apply text-slate-900 dark:text-white;
+  }
+  .segmented-item-active:hover {
+    background: var(--glass-bg-strong);
+  }
+}
+
+/* backdrop-filter 를 못 쓰는 브라우저에서는 불투명하게 떨어뜨립니다. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-strong,
+  .card,
+  .btn-soft,
+  .input,
+  .segmented {
+    background: rgba(255, 255, 255, 0.92);
+  }
+  @media (prefers-color-scheme: dark) {
+    .glass,
+    .glass-strong,
+    .card,
+    .btn-soft,
+    .input,
+    .segmented {
+      background: rgba(18, 22, 34, 0.94);
+    }
+  }
+}
+
+/* 투명도를 줄여달라고 설정한 사용자 (iOS 손쉬운 사용 등) */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-strong,
+  .card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    .glass,
+    .glass-strong,
+    .card {
+      background: rgba(18, 22, 34, 0.96);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+  .btn:active:not(:disabled) {
+    transform: none;
   }
 }

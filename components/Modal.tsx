@@ -25,7 +25,7 @@ export default function Modal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/25 p-0 backdrop-blur-md sm:items-center sm:p-4">
       <button
         type="button"
         aria-label="닫기"
@@ -36,7 +36,7 @@ export default function Modal({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="card relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-b-none p-5 sm:max-w-md sm:rounded-2xl"
+        className="glass-strong relative z-10 max-h-[90vh] w-full overflow-y-auto rounded-3xl rounded-b-none p-5 sm:max-w-md sm:rounded-3xl"
       >
         <div className="mb-4 flex items-center justify-between gap-4">
           <h2 className="text-base font-semibold">{title}</h2>

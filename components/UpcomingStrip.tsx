@@ -8,10 +8,10 @@ import { dueInfo, todayISO, type DueTone } from "@/lib/date";
 import type { Subject, Task } from "@/lib/types";
 
 const TONE: Record<DueTone, string> = {
-  overdue: "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
-  today: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
-  soon: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300",
-  later: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  overdue: "bg-rose-400/25 text-rose-700 dark:bg-rose-400/25 dark:text-rose-100",
+  today: "bg-amber-400/30 text-amber-800 dark:bg-amber-400/25 dark:text-amber-100",
+  soon: "bg-indigo-400/25 text-indigo-700 dark:bg-indigo-400/25 dark:text-indigo-100",
+  later: "bg-slate-400/20 text-slate-600 dark:bg-slate-400/20 dark:text-slate-200",
 };
 
 export default function UpcomingStrip({
@@ -41,18 +41,18 @@ export default function UpcomingStrip({
           <Link
             key={task.id}
             href="/tasks"
-            className="card flex shrink-0 items-center gap-2 px-3 py-2 text-sm transition hover:brightness-95"
+            className="card flex shrink-0 items-center gap-2 rounded-2xl px-3 py-2 text-sm transition duration-200 hover:bg-white/70 dark:hover:bg-white/10"
           >
             <span>{taskTypeEmoji(task.type)}</span>
             {subject && (
-              <span className={`rounded px-1.5 py-0.5 text-[11px] ${colorOf(subject.color).chip}`}>
+              <span className={`rounded-md px-2 py-0.5 text-[11px] ${colorOf(subject.color).chip}`}>
                 {subject.name}
               </span>
             )}
             <span className="max-w-40 truncate font-medium">{task.title}</span>
             <span
-              className={`rounded px-1.5 py-0.5 text-[11px] font-semibold ${
-                info ? TONE[info.tone] : "bg-slate-100 dark:bg-slate-800"
+              className={`rounded-md px-2 py-0.5 text-[11px] font-semibold ${
+                info ? TONE[info.tone] : "bg-slate-400/20"
               }`}
             >
               {info?.text ?? "…"}

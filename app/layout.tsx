@@ -26,7 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="ko">
       <body>
         <div className="mx-auto flex min-h-dvh max-w-4xl flex-col px-4 pb-16">
-          <header className="flex flex-wrap items-center justify-between gap-3 py-5">
+          <header className="glass-strong sticky top-3 z-40 mt-3 mb-5 flex flex-wrap items-center justify-between gap-3 rounded-3xl px-4 py-3">
             <Link href="/" className="text-lg font-bold tracking-tight">
               🗓️ 우리 반 시간표
             </Link>
@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
           <main className="flex-1">{children}</main>
 
-          <footer className="pt-10 text-center text-xs text-slate-400 dark:text-slate-600">
+          <footer className="pt-10 text-center text-xs text-slate-500/80 dark:text-slate-400/60">
             링크를 아는 친구는 누구나 볼 수 있고, 고치려면 비밀번호가 필요해요.
           </footer>
         </div>
